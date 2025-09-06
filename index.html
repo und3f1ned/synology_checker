@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Synology Model Checker - Buy or Avoid</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .search-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        input[type="text"] {
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            width: 300px;
+            margin-right: 10px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            padding: 15px 25px;
+            font-size: 18px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5a6fd8;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+        
+        .buy {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        
+        .caution {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+        }
+        
+        .avoid {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .status-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .details {
+            margin-top: 15px;
+            text-align: left;
+            background: rgba(255,255,255,0.8);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .legend h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        
+        .examples {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        @media (max-width: 600px) {
+            input[type="text"] {
+                width: 200px;
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Synology Model Checker</h1>
+        
+        <div class="search-section">
+            <input type="text" id="modelInput" placeholder="Enter model (e.g., DS923+, DS1525+)" maxlength="20">
+            <button onclick="checkModel()">Check Model</button>
+        </div>
+        
+        <div id="result" class="result">
+            <div class="status-icon" id="statusIcon"></div>
+            <h2 id="statusTitle"></h2>
+            <p id="statusMessage"></p>
+            <div class="details" id="details"></div>
+        </div>
+        
+        <div class="legend">
+            <h3>Status Legend</h3>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #28a745;"></div>
+                <strong>Highly Recommended:</strong> Latest 2025 models with full DSM 7.2+ support
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #17a2b8;"></div>
+                <strong>Recommended:</strong> 2020-2024 models with good support remaining
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ffc107;"></div>
+                <strong>Caution:</strong> Older models with limited remaining support
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #dc3545;"></div>
+                <strong>Avoid:</strong> End-of-life or very limited support models
+            </div>
+            
+            <div class="examples">
+                <strong>Try these examples:</strong> DS925+, DS1525+, DS923+, DS918+, DS213+, DS224+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const modelDatabase = {
+            // 2025 Models - Highly Recommended
+            'DS725+': {
+                status: 'buy',
+                category: 'Highly Recommended',
+                icon: '🟢',
+                message: 'Latest 2025 model with excellent future support',
+                details: 'Refreshes DS723+ with AMD Ryzen R1600, 4GB RAM (up to 32GB), 2.5GbE networking. Note: Synology-branded drives only for warranty.'
+            },
+            'DS925+': {
+                status: 'buy',
+                category: 'Highly Recommended', 
+                icon: '🟢',
+                message: 'Latest 2025 model - excellent choice for power users',
+                details: 'AMD Ryzen V1500B quad-core, upgraded networking, USB-C expansion. Replaces DS923+. Note: Synology drive compatibility restrictions apply.'
+            },
+            'DS1525+': {
+                status: 'buy',
+                category: 'Highly Recommended',
+                icon: '🟢', 
+                message: 'Premium 2025 5-bay model with PCIe expansion',
+                details: 'AMD Ryzen quad-core, 8GB ECC RAM (up to 32GB), PCIe slot for 10GbE. Great for professionals and small businesses.'
+            },
+            'DS225+': {
+                status: 'buy',
+                category: 'Highly Recommended',
+                icon: '🟢',
+                message: 'Latest budget-friendly 2025 model',
+                details: 'Intel Celeron J4125, 2.5GbE networking. Refreshes DS224+. Good entry-level choice.'
+            },
+            'DS425+': {
+                status: 'buy', 
+                category: 'Highly Recommended',
+                icon: '🟢',
+                message: 'Latest 4-bay 2025 model for home/office',
+                details: 'Intel Celeron J4125, 2.5GbE networking, M.2 NVMe slots. Refreshes DS423+.'
+            },
+            'DS625SLIM': {
+                status: 'caution',
+                category: 'Caution',
+                icon: '⚠️',
+                message: '2025 model but 2.5" drives only',
+                details: 'New slim 6-bay supporting only 2.5" drives. Limited HDD options, mainly for SSD setups. Expensive Synology SSD requirement.'
+            },
+            'DS1825+': {
+                status: 'buy',
+                category: 'Highly Recommended',
+                icon: '🟢',
+                message: 'Latest 8-bay 2025 model',
+                details: '8-bay desktop model with 2025 hardware refresh. Professional-grade features.'
+            },
+            
+            // 2022-2024 Models - Recommended
+            'DS923+': {
+                status: 'caution',
+                category: 'Caution',
+                icon: '⚠️',
+                message: 'Good model but superseded by DS925+',
+                details: 'Still excellent but consider DS925+ for better future-proofing. AMD Ryzen R1600, good for existing users.'
+            },
+            'DS723+': {
+                status: 'caution',
+                category: 'Caution', 
+                icon: '⚠️',
+                message: 'Decent model but DS725+ is available',
+                details: 'AMD Ryzen R1600, 2GB RAM. Consider DS725+ for 2.5GbE and double RAM.'
+            },
+            'DS1522+': {
+                status: 'caution',
+                category: 'Caution',
+                icon: '⚠️',
+                message: 'Good 5-bay but DS1525+ offers more',
+                details: 'AMD Ryzen R1600. DS1525+ provides better CPU, ECC RAM, and future support.'
+            },
+            'DS224+': {
+                status: 'caution',
+                category: 'Caution',
+                icon: '⚠️',
+                message: '2024 model but DS225+ available',
+                details: 'Intel Celeron J4125, 1GbE. Consider DS225+ for 2.5GbE networking.'
+            },
+            'DS423+': {
+                status: 'caution',
+                category: 'Caution',
+                icon: '⚠️',
+                message: '2024 model but DS425+ is newer',
+                details: 'Intel Celeron J4125. DS425+ offers 2.5GbE upgrade.'
+            },
+            
+            // 2020-2021 Models - Still Good
+            'DS920+': {
+                status: 'buy',
+                category: 'Recommended',
+                icon: '🔵',
+                message: 'Still a solid choice with good support remaining',
+                details: 'Intel Celeron J4125, 4GB RAM, supports DSM 7.2. About 5-7 years support remaining.'
+            },
+            'DS720+': {
+                status: 'buy',
+                category: 'Recommended', 
+                icon: '🔵',
+                message: 'Good 2-bay option with decent support life',
+                details: 'Intel Celeron J4125, supports DSM 7.2. Consider DS725+ for longer support.'
+            },
+            'DS420+': {
+                status: 'buy',
+                category: 'Recommended',
+                icon: '🔵', 
+                message: 'Budget-friendly with reasonable support',
+                details: 'Intel Celeron J4025, supports DSM 7.2. Good value if price is significantly lower.'
+            },
+            'DS220+': {
+                status: 'buy',
+                category: 'Recommended',
+                icon: '🔵',
+                message: 'Entry-level with DSM 7.2 support',
+                details: 'Intel Celeron J4025, 2GB RAM. Good budget option if much cheaper than DS225+.'
+            },
+            'DS1621+': {
+                status: 'buy',
+                category: 'Recommended',
+                icon: '🔵',
+                message: 'Premium 6-bay with ECC RAM',
+                details: 'AMD Ryzen V1500B, 4GB ECC RAM, PCIe slot. Still excellent for professional use.'
+            },
+            'DS1821+': {
+                status: 'buy',
+                category: 'Recommended',
+                icon: '🔵',
+                message: '8-bay workhorse with good support',
+                details: 'AMD Ryzen V1500B, 4GB RAM, multiple expansion options. Good for high-capacity needs.'
+            },
+            
+            // 2018-2019 Models - Caution
+            'DS918+': {
+                status: 'caution',
+                category: 'Caution',
+                icon: '⚠️',
+                message: 'Aging model with limited future support',
+                details: 'Intel Celeron J3455, supports DSM 7.2 but may not get DSM 8. Consider only if heavily discounted.'
+            },
+            'DS718+': {
+                status: 'caution',
+                category: 'Caution',
+                icon: '⚠️',
+                message: '2018 model nearing end of support cycle',
+                details: 'Intel Celeron J3455. Limited remaining support life. Avoid unless very cheap.'
+            },
+            'DS418': {
+                status: 'caution',
+                category: 'Caution', 
+                icon: '⚠️',
+                message: '2018 model with limited future',
+                details: 'Intel Celeron J3355. May not receive future major DSM updates.'
+            },
+            'DS218+': {
+                status: 'caution',
+                category: 'Caution',
+                icon: '⚠️',
+                message: '2018 model - consider newer alternatives',
+                details: 'Intel Celeron J3355. Supports DSM 7.2 but limited future support expected.'
+            },
+            
+            // 2016-2017 Models - Avoid
+            'DS916+': {
+                status: 'avoid',
+                category: 'Avoid',
+                icon: '🔴',
+                message: 'Too old - limited support remaining',
+                details: 'Intel Pentium N3710. May lose support soon. Consider modern alternatives.'
+            },
+            'DS716+': {
+                status: 'avoid',
+                category: 'Avoid',
+                icon: '🔴',
+                message: '2016 model - not recommended',
+                details: 'Intel Celeron N3150. Very limited remaining support. Avoid purchase.'
+            },
+            'DS416': {
+                status: 'avoid',
+                category: 'Avoid',
+                icon: '🔴',
+                message: '2016 model nearing end of life',
+                details: 'Annapurna Labs Alpine AL-212. Limited support remaining.'
+            },
+            
+            // End of Life Models - Avoid
+            'DS213+': {
+                status: 'avoid',
+                category: 'Avoid',
+                icon: '🔴',
+                message: 'End of life - no longer supported',
+                details: 'Freescale QorIQ P1022. DSM 6.2 only, reached end of life October 2024. Do not buy.'
+            },
+            'DS214+': {
+                status: 'avoid',
+                category: 'Avoid',
+                icon: '🔴',
+                message: 'DSM 7.1 maximum - limited support',
+                details: 'Marvell Armada 370. Cannot upgrade to DSM 7.2. End of full support.'
+            },
+            'DS415+': {
+                status: 'avoid',
+                category: 'Avoid',
+                icon: '🔴',
+                message: 'DSM 7.1 maximum - avoid',
+                details: 'Intel Atom C2538. Stuck at DSM 7.1, no future major updates.'
+            },
+            'DS212+': {
+                status: 'avoid',
+                category: 'Avoid',
+                icon: '🔴',
+                message: 'End of life - DSM 6.2 only',
+                details: 'Marvell Kirkwood 88F6281. Reached end of life October 2024.'
+            },
+            'DS211+': {
+                status: 'avoid',
+                category: 'Avoid',
+                icon: '🔴',
+                message: 'End of life - no support',
+                details: 'Marvell Kirkwood 88F6281. DSM 6.2 maximum, end of life.'
+            },
+            'DS112+': {
+                status: 'avoid',
+                category: 'Avoid',
+                icon: '🔴',
+                message: 'End of life - avoid completely',
+                details: 'Marvell Kirkwood 88F6281. DSM 6.2 only, no longer supported.'
+            }
+        };
+
+        function checkModel() {
+            const input = document.getElementById('modelInput');
+            const result = document.getElementById('result');
+            const statusIcon = document.getElementById('statusIcon');
+            const statusTitle = document.getElementById('statusTitle');
+            const statusMessage = document.getElementById('statusMessage');
+            const details = document.getElementById('details');
+            
+            const modelName = input.value.trim().toUpperCase();
+            
+            if (!modelName) {
+                alert('Please enter a model name');
+                return;
+            }
+            
+            const modelInfo = modelDatabase[modelName];
+            
+            if (modelInfo) {
+                statusIcon.textContent = modelInfo.icon;
+                statusTitle.textContent = modelInfo.category;
+                statusMessage.textContent = modelInfo.message;
+                details.innerHTML = `<strong>Details:</strong> ${modelInfo.details}`;
+                
+                result.className = `result ${modelInfo.status}`;
+                result.style.display = 'block';
+            } else {
+                statusIcon.textContent = '❓';
+                statusTitle.textContent = 'Model Not Found';
+                statusMessage.textContent = 'This model is not in our database. Please check the spelling or try a different model.';
+                details.innerHTML = '<strong>Suggestion:</strong> Make sure you include the "+" symbol if applicable (e.g., DS923+, not DS923). For newer models not in our database, check Synology\'s official support page.';
+                
+                result.className = 'result caution';
+                result.style.display = 'block';
+            }
+        }
+        
+        // Allow Enter key to trigger search
+        document.getElementById('modelInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkModel();
+            }
+        });
+        
+        // Auto-format input (convert to uppercase, handle common formats)
+        document.getElementById('modelInput').addEventListener('input', function(e) {
+            let value = e.target.value.toUpperCase();
+            // Auto-add + if it looks like a plus model
+            if (value.match(/^DS\d{3,4}$/) || value.match(/^DS\d{4}[A-Z]+$/)) {
+                // Don't auto-add + as some models don't have it
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
