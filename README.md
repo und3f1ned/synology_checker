@@ -3,11 +3,13 @@ The page is based on the comprehensive research about Synology's support lifecyc
 
 ## Key Features:
 🎯 Simple Interface: Just type in any Synology model and get instant recommendations
+
 🚦 Color-Coded Results:
   - Green: Highly recommended (2025 models with full future support)
   - Blue: Recommended (2020-2024 models with good remaining support)
   - Yellow: Caution (limited remaining support or specific concerns)
   - Red: Avoid (end-of-life or very limited support)
+
 📊 Comprehensive Database: Covers all major models from current 2025 releases back to discontinued models
 💡 Detailed Explanations: Each result includes specific reasons and technical details
 
