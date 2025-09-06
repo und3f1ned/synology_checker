@@ -15,10 +15,10 @@ The page is based on the comprehensive research about Synology's support lifecyc
 💡 Detailed Explanations: Each result includes specific reasons and technical details
 
 ## What It Checks:
-DSM Support Status: Current and future OS compatibility
-Release Year: How much support life remains
-Drive Compatibility: Notes about Synology's 2025 drive restrictions
-End-of-Life Status: Models that no longer receive updates
+- DSM Support Status: Current and future OS compatibility
+- Release Year: How much support life remains
+- Drive Compatibility: Notes about Synology's 2025 drive restrictions
+- End-of-Life Status: Models that no longer receive updates
 
 ## Try These Examples:
 - DS925+ - Latest 2025 flagship
