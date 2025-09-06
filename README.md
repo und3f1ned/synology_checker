@@ -18,8 +18,8 @@ Drive Compatibility: Notes about Synology's 2025 drive restrictions
 End-of-Life Status: Models that no longer receive updates
 
 ## Try These Examples:
-DS925+ - Latest 2025 flagship
-DS1525+ - Premium 5-bay model
-DS923+ - Previous generation
-DS918+ - Aging but functional
-DS213+ - End of life model
+- DS925+ - Latest 2025 flagship
+- DS1525+ - Premium 5-bay model
+- DS923+ - Previous generation
+- DS918+ - Aging but functional
+- DS213+ - End of life model
