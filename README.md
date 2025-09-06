@@ -11,6 +11,7 @@ The page is based on the comprehensive research about Synology's support lifecyc
   - Red: Avoid (end-of-life or very limited support)
 
 📊 Comprehensive Database: Covers all major models from current 2025 releases back to discontinued models
+
 💡 Detailed Explanations: Each result includes specific reasons and technical details
 
 ## What It Checks:
